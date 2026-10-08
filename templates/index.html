@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Mining and Classification System | AI & Data Mining</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- 1. Top Navigation Bar -->
+        <header class="navbar">
+            <div class="nav-container">
+                <a href="#home" class="nav-brand">
+                    <div class="brand-badge">
+                        <i class="fa-solid fa-file-waveform"></i>
+                    </div>
+                    <div class="brand-title">
+                        <span class="main-title">Resume Mining</span>
+                        <span class="sub-title">& Classification System</span>
+                    </div>
+                </a>
+                <nav class="nav-links">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#analyzer" class="nav-link">Resume Analyzer</a>
+                    <a href="#how-it-works" class="nav-link">How It Works</a>
+                    <a href="#dashboard" class="nav-link">Data Mining Dashboard</a>
+                    <a href="#about" class="nav-link">About</a>
+                </nav>
+                <div class="nav-actions">
+                    <span class="project-tag">
+                        <i class="fa-solid fa-graduation-cap"></i> B.Tech CSE Project
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <main class="content-wrapper">
+            <!-- 2. Hero Section -->
+            <section class="hero-section" id="home">
+                <div class="hero-container">
+                    <div class="hero-badge">
+                        <i class="fa-solid fa-brain"></i>
+                        <span>TF-IDF &bull; OCR &bull; Machine Learning</span>
+                    </div>
+                    <h1 class="hero-title">AI-Powered Resume Mining</h1>
+                    <p class="hero-subtitle">
+                        Analyze resumes and predict the most suitable professional category using Data Mining and Machine Learning.
+                    </p>
+                    <div class="hero-stats-banner">
+                        <div class="h-stat-item">
+                            <span class="h-stat-val">8,905</span>
+                            <span class="h-stat-lbl">Resume PDF Dataset</span>
+                        </div>
+                        <div class="h-stat-divider"></div>
+                        <div class="h-stat-item">
+                            <span class="h-stat-val">OCR</span>
+                            <span class="h-stat-lbl">Tesseract Image Extraction</span>
+                        </div>
+                        <div class="h-stat-divider"></div>
+                        <div class="h-stat-item">
+                            <span class="h-stat-val">TF-IDF</span>
+                            <span class="h-stat-lbl">NLP Feature Mining</span>
+                        </div>
+                        <div class="h-stat-divider"></div>
+                        <div class="h-stat-item">
+                            <span class="h-stat-val">ML</span>
+                            <span class="h-stat-lbl">Supervised Classification</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Resume Analyzer (Upload & Results) -->
+            <section class="analyzer-section" id="analyzer">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-microchip"></i> Resume Analyzer</h2>
+                    <p>Upload a candidate resume in PDF format to mine skills and classify category</p>
+                </div>
+
+                <!-- Upload Card -->
+                <div class="card upload-card" id="upload-card">
+                    <div class="card-inner">
+                        <!-- Drag & Drop Zone -->
+                        <div class="drop-zone" id="drop-zone">
+                            <input type="file" id="pdf-file-input" accept=".pdf,application/pdf" hidden>
+                            <div class="drop-zone-icon">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <h3>Upload Candidate Resume</h3>
+                            <p>Drag and drop your PDF file here, or click to browse</p>
+                            <button type="button" class="btn btn-secondary" id="browse-btn">
+                                <i class="fa-regular fa-folder-open"></i> Browse PDF
+                            </button>
+                            <span class="format-note">Supports scanned & digital PDFs (Max 16 MB)</span>
+                        </div>
+
+                        <!-- Selected File Preview Bar (Hidden initially) -->
+                        <div class="file-preview-strip hidden" id="file-preview-strip">
+                            <div class="file-icon-box">
+                                <i class="fa-solid fa-file-pdf"></i>
+                            </div>
+                            <div class="file-details">
+                                <div class="file-name-text" id="selected-file-name">resume.pdf</div>
+                                <div class="file-size-text" id="selected-file-size">145 KB</div>
+                            </div>
+                            <button type="button" class="btn-close-file" id="clear-file-btn" title="Remove selected file">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+
+                        <!-- Action Button Bar -->
+                        <div class="upload-action-bar">
+                            <button type="button" class="btn btn-primary" id="analyze-btn" disabled>
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Analyze Resume
+                            </button>
+                        </div>
+
+                        <!-- Error Banner (Hidden initially) -->
+                        <div class="alert-box error hidden" id="alert-box">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span id="alert-msg-text">Error message</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Loading State -->
+                <div class="card loading-card hidden" id="loading-card">
+                    <div class="loader-content">
+                        <div class="modern-spinner"></div>
+                        <h3 id="loading-primary-text">Analyzing Resume...</h3>
+                        <p id="loading-sub-text">Converting PDF and performing OCR text extraction</p>
+
+                        <div class="progression-tracker">
+                            <div class="track-step active" id="p-step-1">
+                                <div class="step-circle"><i class="fa-solid fa-image"></i></div>
+                                <span>1. OCR Extraction</span>
+                            </div>
+                            <div class="track-step" id="p-step-2">
+                                <div class="step-circle"><i class="fa-solid fa-filter"></i></div>
+                                <span>2. Text Preprocessing</span>
+                            </div>
+                            <div class="track-step" id="p-step-3">
+                                <div class="step-circle"><i class="fa-solid fa-chart-simple"></i></div>
+                                <span>3. TF-IDF Vectors</span>
+                            </div>
+                            <div class="track-step" id="p-step-4">
+                                <div class="step-circle"><i class="fa-solid fa-check"></i></div>
+                                <span>4. Classification</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Results Section -->
+                <div class="results-container hidden" id="results-container">
+                    <div class="results-toolbar">
+                        <div class="res-meta-tag">
+                            <i class="fa-solid fa-file-check"></i>
+                            <span id="res-file-name">resume.pdf</span>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" id="analyze-another-btn">
+                            <i class="fa-solid fa-arrow-rotate-left"></i> Analyze Another Resume
+                        </button>
+                    </div>
+
+                    <!-- Category Prediction Hero -->
+                    <div class="card prediction-hero">
+                        <div class="pred-top-row">
+                            <div>
+                                <span class="pred-label">PREDICTED RESUME CATEGORY</span>
+                                <h2 class="pred-category-title" id="pred-category-name">Public Relations</h2>
+                            </div>
+                            <div class="pred-badge-cluster">
+                                <div class="confidence-badge" id="confidence-badge-wrap">
+                                    <span class="conf-lbl">Confidence:</span>
+                                    <span class="conf-val" id="pred-confidence-val">94.2%</span>
+                                </div>
+                                <span class="model-status-tag" id="pred-status-tag">
+                                    <i class="fa-solid fa-circle-check"></i> Model Active
+                                </span>
+                            </div>
+                        </div>
+                        <div class="pred-footer">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span id="pred-explanation-msg">Classification completed using trained TF-IDF model.</span>
+                        </div>
+                    </div>
+
+                    <!-- 2-Column Split: Skills & Info -->
+                    <div class="results-grid">
+                        <!-- Extracted Skills -->
+                        <div class="card skills-panel">
+                            <div class="card-header">
+                                <div class="card-title-text">
+                                    <i class="fa-solid fa-code"></i> Extracted Skills
+                                </div>
+                                <span class="badge-count" id="skills-total-count">0 Detected</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="skills-tag-wrap" id="skills-tag-wrap">
+                                    <!-- Skill pills dynamically injected here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resume Summary & Important Information -->
+                        <div class="card info-panel">
+                            <div class="card-header">
+                                <div class="card-title-text">
+                                    <i class="fa-solid fa-address-card"></i> Important Resume Information
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="info-row">
+                                    <span class="i-label"><i class="fa-solid fa-envelope"></i> Email:</span>
+                                    <span class="i-value" id="info-email-val">None found</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="i-label"><i class="fa-solid fa-phone"></i> Phone:</span>
+                                    <span class="i-value" id="info-phone-val">None found</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="i-label"><i class="fa-solid fa-link"></i> Profiles:</span>
+                                    <div class="i-value link-col" id="info-links-val">None found</div>
+                                </div>
+                                <div class="info-row">
+                                    <span class="i-label"><i class="fa-solid fa-file-lines"></i> Metrics:</span>
+                                    <span class="i-value" id="info-doc-metrics">1 Page &bull; 240 Words</span>
+                                </div>
+                                <div class="info-summary-box">
+                                    <span class="summary-label"><i class="fa-solid fa-quote-left"></i> Resume Summary:</span>
+                                    <p id="info-summary-text">Extracted summary overview will appear here.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Raw Extracted Text (Collapsible) -->
+                    <div class="card raw-text-card">
+                        <div class="card-header clickable-toggle" id="toggle-raw-text">
+                            <div class="card-title-text">
+                                <i class="fa-solid fa-align-left"></i> Extracted Resume Text (OCR / Text Output)
+                            </div>
+                            <i class="fa-solid fa-chevron-down" id="text-chevron"></i>
+                        </div>
+                        <div class="card-body hidden" id="raw-text-body">
+                            <pre class="text-preview-code" id="raw-text-pre"></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. How It Works Section -->
+            <section class="how-section" id="how-it-works">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-route"></i> How It Works</h2>
+                    <p>The 4-stage end-to-end Data Mining and Machine Learning pipeline</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-num">01</div>
+                        <div class="step-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
+                        <h3>Upload Resume</h3>
+                        <p>User uploads a resume PDF (supports both scanned image-based and digital documents).</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">02</div>
+                        <div class="step-icon"><i class="fa-solid fa-camera-retro"></i></div>
+                        <h3>Extract Resume Text</h3>
+                        <p>PDF pages are converted into images and processed through Tesseract OCR to extract complete text.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">03</div>
+                        <div class="step-icon"><i class="fa-solid fa-filter-circle-dollar"></i></div>
+                        <h3>Mine & Preprocess Data</h3>
+                        <p>Text is cleaned, normalized, stopwords are filtered, and candidate skills are mined using taxonomy search.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">04</div>
+                        <div class="step-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h3>Predict Category</h3>
+                        <p>TF-IDF features are extracted and fed into the trained Machine Learning classifier to output the job category.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Data Mining Dashboard Section -->
+            <section class="dashboard-section" id="dashboard">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-chart-pie"></i> Data Mining Dashboard</h2>
+                    <p>Evaluation metrics and performance statistics from model training</p>
+                </div>
+
+                <div class="card dashboard-card" id="dashboard-content">
+                    <!-- Dynamic state: Loaded from /metrics -->
+                    <div id="metrics-view">
+                        <div class="dashboard-grid">
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Total Dataset Resumes</span>
+                                <span class="d-val" id="d-total-resumes">8,905</span>
+                            </div>
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Categories / Labels</span>
+                                <span class="d-val" id="d-categories">--</span>
+                            </div>
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Training Accuracy</span>
+                                <span class="d-val text-emerald" id="d-train-acc">--%</span>
+                            </div>
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Testing Accuracy</span>
+                                <span class="d-val text-indigo" id="d-test-acc">--%</span>
+                            </div>
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Weighted Precision</span>
+                                <span class="d-val" id="d-precision">--%</span>
+                            </div>
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Weighted Recall</span>
+                                <span class="d-val" id="d-recall">--%</span>
+                            </div>
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Weighted F1-Score</span>
+                                <span class="d-val" id="d-f1">--%</span>
+                            </div>
+                            <div class="d-metric-box">
+                                <span class="d-lbl">Active Classifier</span>
+                                <span class="d-val text-purple" id="d-model-name">--</span>
+                            </div>
+                        </div>
+
+                        <!-- Confusion Matrix Container -->
+                        <div class="cm-container hidden" id="cm-container">
+                            <h4><i class="fa-solid fa-table-cells"></i> Training Confusion Matrix</h4>
+                            <div class="cm-image-wrap">
+                                <img src="/assets/confusion_matrix.png" alt="Confusion Matrix" id="cm-image">
+                            </div>
+                        </div>
+
+                        <!-- Notice if not yet trained -->
+                        <div class="training-notice-banner" id="not-trained-banner">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <div>
+                                <h4>Model Training In Progress / Colab Connection Pending</h4>
+                                <p>
+                                    Metrics will automatically populate once you run <code>python training/train_model.py</code>
+                                    or copy your Colab trained <code>resume_model.pkl</code>, <code>tfidf_vectorizer.pkl</code>,
+                                    and <code>metrics.json</code> into the <code>model/</code> folder.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. About Section (Suitable for B.Tech Viva) -->
+            <section class="about-section" id="about">
+                <div class="section-header">
+                    <h2><i class="fa-solid fa-book-open-reader"></i> About the Project</h2>
+                    <p>Academic concept explanations designed for B.Tech Computer Science presentation</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="about-card">
+                        <div class="about-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                        <h3>What is Resume Mining?</h3>
+                        <p>
+                            Resume Mining is the specialized application of text mining and natural language processing to extract structured information (skills, qualifications, contact records) from unstructured resumes and classify them into professional career domains.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon"><i class="fa-solid fa-database"></i></div>
+                        <h3>How Data Mining is used?</h3>
+                        <p>
+                            Data Mining discovers hidden linguistic patterns and feature correlations across thousands of resumes. By converting unstructured documents into numerical feature representations, algorithms can detect distinctive domain terminology.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon"><i class="fa-solid fa-eye"></i></div>
+                        <h3>How OCR is used?</h3>
+                        <p>
+                            The Kaggle dataset contains scanned, image-based PDFs where traditional text extractors yield 0 characters. Optical Character Recognition (OCR) via <code>pdf2image</code> and <strong>Tesseract OCR</strong> renders the PDF pages to high-resolution images and converts pixel patterns into machine-encoded text.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon"><i class="fa-solid fa-calculator"></i></div>
+                        <h3>How TF-IDF is used?</h3>
+                        <p>
+                            <strong>Term Frequency - Inverse Document Frequency (TF-IDF)</strong> scores words by how frequently they appear in a resume balanced against how common they are across the entire 8,905 dataset, giving high mathematical weights to domain-specific keywords (e.g. "Kubernetes", "PyTorch").
+                        </p>
+                    </div>
+
+                    <div class="about-card span-full">
+                        <div class="about-icon"><i class="fa-solid fa-network-wired"></i></div>
+                        <h3>How Machine Learning Classification works?</h3>
+                        <p>
+                            Supervised classification algorithms (such as <strong>Logistic Regression</strong> and <strong>Linear SVM</strong>) learn decision boundaries across high-dimensional TF-IDF feature vectors. The model maps extracted vocabulary distributions to category probabilities, predicting the candidate's best matching job profile with quantitative confidence.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-left">
+                    <span class="footer-title">Resume Mining and Classification System</span>
+                    <p>A Full-Stack Data Mining Project built with Flask, Tesseract OCR & Scikit-Learn</p>
+                </div>
+                <div class="footer-right">
+                    <span>Dataset: 8,905 Kaggle Resumes PDF</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Application JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

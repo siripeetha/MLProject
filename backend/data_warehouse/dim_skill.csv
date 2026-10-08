@@ -1,0 +1,28 @@
+skill_id,skill_name,skill_category
+SKL_001,java,Programming Languages
+SKL_002,python,Programming Languages
+SKL_003,c,Programming Languages
+SKL_004,c++,Programming Languages
+SKL_005,javascript,Programming Languages
+SKL_006,react,Web Development
+SKL_007,node.js,Web Development
+SKL_008,spring boot,Web Development
+SKL_009,sql,Databases
+SKL_010,mongodb,Databases
+SKL_011,mysql,Databases
+SKL_012,postgresql,Databases
+SKL_013,aws,Cloud & DevOps
+SKL_014,azure,Cloud & DevOps
+SKL_015,docker,Cloud & DevOps
+SKL_016,git,Tools & Version Control
+SKL_017,github,Tools & Version Control
+SKL_018,dsa,Computer Science Core
+SKL_019,machine learning,AI & Data Science
+SKL_020,deep learning,AI & Data Science
+SKL_021,pandas,AI & Data Science
+SKL_022,numpy,AI & Data Science
+SKL_023,scikit-learn,AI & Data Science
+SKL_024,power bi,Business Intelligence
+SKL_025,tableau,Business Intelligence
+SKL_026,html,Web Development
+SKL_027,css,Web Development

@@ -1,0 +1,15 @@
+Check,Result,Status
+Duplicate Primary Key in DIM_CANDIDATE,0,PASS
+Duplicate Primary Key in DIM_JOB,0,PASS
+Duplicate Primary Key in DIM_SKILL,0,PASS
+Duplicate Primary Key in DIM_DATE,0,PASS
+Duplicate Primary Key in DIM_EDUCATION,0,PASS
+Duplicate Primary Key in DIM_EXPERIENCE,0,PASS
+Null Values in FACT_CANDIDATE_ANALYSIS,0,PASS
+"Invalid Overall Scores (Out of [0, 100])",0,PASS
+Referential Integrity (candidate_id FK),0,PASS
+Referential Integrity (job_id FK),0,PASS
+Referential Integrity (skill_id FK),0,PASS
+Referential Integrity (date_id FK),0,PASS
+Referential Integrity (education_id FK),0,PASS
+Referential Integrity (experience_id FK),0,PASS

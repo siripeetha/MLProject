@@ -1,0 +1,11 @@
+Feature,Importance,Percentage
+skill_match_score,6.444371127488378,49.58
+experience_match_score,2.712441228311492,20.87
+education_match_score,0.5834079244855291,4.49
+experience_years,0.574754135175259,4.42
+certification_score,0.5611228992280642,4.32
+certification_count,0.5611228992280637,4.32
+project_count,0.5266633335536178,4.05
+project_score,0.5266633335536177,4.05
+skill_count,0.49492112740811794,3.81
+cosine_similarity_score,0.013263731953907574,0.1
